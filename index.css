@@ -1,0 +1,28 @@
+:root{
+    display: flex;
+    justify-content: center;
+}
+
+.container{
+    display: grid;
+    grid-template-columns: repeat(3,200px);
+    grid-template-rows: repeat(3,200px);
+    gap: 10px;
+}
+
+.card{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: antiquewhite;
+    color: brown;
+    font-size: large;
+}
+
+.message{
+    display: flex;
+    justify-content: center;
+    background-color: aqua;
+    color: black;
+    font-size: 2rem;
+}
