@@ -1,6 +1,6 @@
 function Gameboard(){
     const rows = 3
-    const columns = 6;
+    const columns = 3;
     const board = [];
 
     // Creating 2D board for putting 
@@ -27,10 +27,7 @@ function Gameboard(){
         getBoard,
 
     }
-
-
 }
-
 
 function Cell(){
     let mark = null;
@@ -99,17 +96,17 @@ function GameController(){
         let CanPutMark = false;
         board.forEach(each_row => {
             each_row.forEach(each_col => {
-                if (each_col.getMark() === null){
-                    CanPutMark = true;
-                }
+                console.log(each_col.getMark());
+                // if (each_col.getMark() === null){
+                //     console.log('c')
+                //     CanPutMark = true;
+                // }
             });
         });
         if (!CanPutMark){
+            // tie
             return 'have no space to put marks';
         }
-
-
-
         if (//checking same row
         board[0][0].getMark() === player.playerMark && board[0][1].getMark() === player.playerMark && board[0][2].getMark() === player.playerMark ||
         board[1][0].getMark() === player.playerMark && board[1][1].getMark() === player.playerMark && board[1][2].getMark() === player.playerMark ||
@@ -151,7 +148,6 @@ game.playRound(1,1);
 game.playRound(1,2);
 game.playRound(2,0);
 game.playRound(2,1);
-game.playRound(2,2);
 game.playRound(2,2);
 
 
