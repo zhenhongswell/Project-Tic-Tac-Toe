@@ -8,14 +8,20 @@ const Tic_Tac_Toc_IIFE = (function(){
     function Gameboard() {
         const rows = 3
         const columns = 3;
-        const board = [];
+        let board = createEmptyBoard();
 
-        // Creating 2D board for putting 
-        for (let i = 0; i < rows; i++) {
-            board[i] = [];
-            for (let j = 0; j < columns; j++) {
-                board[i].push(Cell());
+        // Creating 2D empty board for putting 
+        
+
+        function createEmptyBoard(){
+            let board = [];
+            for (let i = 0; i < rows; i++) {
+                board[i] = [];
+                for (let j = 0; j < columns; j++) {
+                    board[i].push(Cell());
+                }
             }
+            return board;
         }
 
         const getBoard = () => board;
@@ -31,10 +37,27 @@ const Tic_Tac_Toc_IIFE = (function(){
             board[row][col].setMark(player);
             return true
         }
+
+        const setBoard = (newBoard) =>{
+            const Before = board;
+            const After = newBoard;
+            if (Before === After){
+                // not thing change
+                return false
+            }
+            if (Before !== After){
+                // New board change!
+                board = newBoard;
+                return true
+            }
+
+            return false;
+        }
         return {
             setMarkInBoard,
             getBoard,
-
+            createEmptyBoard,
+            setBoard,
         }
     }
 
@@ -61,6 +84,8 @@ const Tic_Tac_Toc_IIFE = (function(){
     function Player(name, mark) {
         const playerName = name;
         const playerMark = mark;
+
+        
 
         return {
             playerName,
@@ -133,6 +158,7 @@ const Tic_Tac_Toc_IIFE = (function(){
                 board[1][0].getMark() === player.playerMark && board[1][1].getMark() === player.playerMark && board[1][2].getMark() === player.playerMark ||
                 board[2][0].getMark() === player.playerMark && board[2][1].getMark() === player.playerMark && board[2][2].getMark() === player.playerMark
             ) {
+                // resetGame();
                 return `${player.playerName} wins!`
             }
             if (//checking same col
@@ -140,13 +166,14 @@ const Tic_Tac_Toc_IIFE = (function(){
                 board[0][1].getMark() === player.playerMark && board[1][1].getMark() === player.playerMark && board[2][1].getMark() === player.playerMark ||
                 board[0][2].getMark() === player.playerMark && board[1][2].getMark() === player.playerMark && board[2][2].getMark() === player.playerMark
             ) {
+                // resetGame();
                 return `${player.playerName} wins!`
             }
             if (//checking the crossover
                 board[0][0].getMark() === player.playerMark && board[1][1].getMark() === player.playerMark && board[2][2].getMark() === player.playerMark ||
                 board[2][0].getMark() === player.playerMark && board[1][1].getMark() === player.playerMark && board[0][2].getMark() === player.playerMark
             ) {
-
+                // resetGame();
                 return `${player.playerName} wins!`
             }
             
@@ -154,39 +181,69 @@ const Tic_Tac_Toc_IIFE = (function(){
             return `${player.playerName} puts a ${player.playerMark} `
         }
 
+        const resetGame = ()=>{
+            const emptyBoard = gameboard.createEmptyBoard();
+            console.log(
+                gameboard.setBoard(emptyBoard)
+                )
+            currentActivePlayer = playerO;
+        }
+
+        
+
+        
+
+        
+
         return {
             getActivePlayer,
             playRound,
             checkGameStat,
-            // gameboard,
+            resetGame,
+            playerX,
+            playerO,
+            gameboard,
         }
     }
     function DisplayController(){
         const messageDiv = document.querySelector('.message');
         const gameboardCellDivs = document.querySelectorAll('.card');
+        const newGameBtn = document.querySelector('.newGame');
+
         gameboardCellDivs.forEach(element => {
             const position = element.addEventListener('click',()=>{
                 const position = clickSetMark(element);
                 const row = position.row;
                 const col = position.col;
-                // const gameboard = gameController.getCurrentGameboard();
                 
                 const currentPlayer = gameController.getActivePlayer();
                 const mark = currentPlayer.playerMark;
-                
+                // need to fix this...
                 if (gameController.playRound(row,col)){
                     element.textContent =  mark !== false ? mark : '_';
 
                     messageDiv.textContent = gameController.checkGameStat(currentPlayer);
                 }
-                console.log(`row:${row} col:${col}`);
-
-                
+                console.log(`row:${row} col:${col}`);                
             });
             
         });
 
 
+        newGameBtn.addEventListener('click',()=>{
+            // visually
+            resetGame();
+            // logic
+            gameController.resetGame();
+
+        })
+
+        function resetGame(){
+            gameboardCellDivs.forEach(element =>{
+                element.textContent="";
+            })
+            messageDiv.textContent="new game!";
+        }
 
         function clickSetMark(element){
             const row = element.getAttribute('data-row');
@@ -196,19 +253,7 @@ const Tic_Tac_Toc_IIFE = (function(){
         }
     }
     return {
-        game: gameController,
+        gameController,
         displayController,
     }
 })();
-
-// Tic_Tac_Toc_IIFE.game.playRound(0,0);
-// Tic_Tac_Toc_IIFE.game.playRound(0,1);
-// Tic_Tac_Toc_IIFE.game.playRound(0,2);
-// Tic_Tac_Toc_IIFE.game.playRound(1,0);
-// Tic_Tac_Toc_IIFE.game.playRound(1,1);
-// Tic_Tac_Toc_IIFE.game.playRound(1,2);
-// Tic_Tac_Toc_IIFE.game.playRound(2,0);
-// Tic_Tac_Toc_IIFE.game.playRound(2,1);
-// Tic_Tac_Toc_IIFE.game.playRound(2,2);
-
-// Tic_Tac_Toc_IIFE.displayController;
