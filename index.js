@@ -82,9 +82,10 @@ const Tic_Tac_Toc_IIFE = (function(){
 
 
     function Player(name, mark) {
-        const playerName = name;
+        let playerName = name;
         const playerMark = mark;
 
+        
         
 
         return {
@@ -209,6 +210,10 @@ const Tic_Tac_Toc_IIFE = (function(){
         const messageDiv = document.querySelector('.message');
         const gameboardCellDivs = document.querySelectorAll('.card');
         const newGameBtn = document.querySelector('.newGame');
+        const changePlayerX_NameBtn = document.querySelector('.playerX-name').querySelector('button');
+        const changePlayerO_NameBtn = document.querySelector('.playerO-name').querySelector('button');
+        changePlayerX_NameBtn.addEventListener('click',()=>changePlayerX_Name());
+        changePlayerO_NameBtn.addEventListener('click',()=>changePlayerO_Name());
 
         gameboardCellDivs.forEach(element => {
             const position = element.addEventListener('click',()=>{
@@ -250,6 +255,18 @@ const Tic_Tac_Toc_IIFE = (function(){
             const col = element.getAttribute('data-col');
             
             return {row,col};
+        }
+
+        
+        function changePlayerX_Name(){
+            const playerX_Name = document.querySelector('.playerX-name').querySelector('input').value;
+            console.log(playerX_Name);
+            gameController.playerX.playerName = playerX_Name;
+        }
+
+        function changePlayerO_Name(){
+            const playerO_Name = document.querySelector('.playerO-name').querySelector('input').value;
+            gameController.playerO.playerName = playerO_Name;
         }
     }
     return {

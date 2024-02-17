@@ -7,3 +7,4 @@ Functionality
 -click to set mark
 -show game stat
 -start/restart button : restart the game
+-set player's name
