@@ -1,8 +1,8 @@
 const GameController = (function(){
 
     const gameboard = new Gameboard();
-    const playerO = new Player('me','O')
-    const playerX = new Player('you','X')
+    const playerO = new Player('playerO','O')
+    const playerX = new Player('playerX','X')
     let currentPlayer = playerX
 
     function playRound(row,col){
@@ -12,9 +12,42 @@ const GameController = (function(){
         const mark = currentPlayer.getMark()
 
         gameboard.setMarkOnGameboard(mark, row, col);
-        console.log(gameboard.getGameboard()[0][0].getValue())
-        console.log(gameboard.getGameboard()[0][1].getValue())
+        console.log(gameboard.getGameboard()[row][col].getValue())
+        if (checkWhoWin(currentPlayer) == true){
+            console.log(currentPlayer.getName() + '_win!')
+        }
 
+
+    }
+
+    function checkWhoWin(currentPlayer) {
+        const myMark = currentPlayer.getMark();
+        const board = gameboard.getGameboard();
+        
+        // Check rows
+        for (let i = 0; i < 3; i++) {
+            if (board[i][0].getValue() === myMark && board[i][1].getValue() === myMark && board[i][2].getValue() === myMark) {
+                return true;
+            }
+        }
+    
+        // Check columns
+        for (let j = 0; j < 3; j++) {
+            if (board[0][j].getValue() === myMark && board[1][j].getValue() === myMark && board[2][j].getValue() === myMark) {
+                return true;
+            }
+        }
+    
+        // Check diagonals
+        if (board[0][0].getValue() === myMark && board[1][1].getValue() === myMark && board[2][2].getValue() === myMark) {
+            return true;
+        }
+    
+        if (board[0][2].getValue() === myMark && board[1][1].getValue() === myMark && board[2][0].getValue() === myMark) {
+            return true;
+        }
+    
+        return false;
     }
 
     function Gameboard() {
@@ -24,6 +57,9 @@ const GameController = (function(){
         
         this.gameboard = createGameboard();
         console.log(this.gameboard)
+
+        
+
         function createGameboard() {
             const gameboard = [];
     
@@ -64,7 +100,7 @@ const GameController = (function(){
         }
 
         const checkGameStat = () =>{
-            
+
         }
 
         
@@ -142,21 +178,52 @@ const GameController = (function(){
 
 
     return{
-        playRound
+        playRound,
+        gameboard
     }
+
+
 })()
 
-// function createDOM(){
-//     document.createElement('div')
-// }
+function createDOM(gameController){
+    const container = document.querySelector(".container")
+    // createing gameboard DOM
+    for (let row = 0; row < 3; row++) {
+        for (let col = 0; col < 3; col++) {
+            const div = document.createElement('div')
+            div.classList.add('cell')
+            div.setAttribute('row',row)
+            div.setAttribute('col',col)
+            
+            div.addEventListener('click', ()=>clickHandler(div,gameController, row, col));
 
-// function clickHandler(){
+            
+            container.appendChild(div)
+        }
+    }
+}
+
+function clickHandler(clickedElement,gameController, row, col) {
+    console.log(row, col);
+    gameController.playRound(row, col)
+    const gameboard = gameController.gameboard
+    // console.log(gameboard)
+    const mark = gameboard.getGameboard()[row][col].getValue()
     
-// }
+    clickedElement.textContent = "mark"
+    if (mark !== null){
+        clickedElement.textContent = mark
+    }
+}
+
+
+
 
 const gameController = GameController
-gameController.playRound(0,0)
-gameController.playRound(0,1)
+createDOM(gameController)
+
+// gameController.playRound(0,0)
+// gameController.playRound(0,1)
 
 
 
